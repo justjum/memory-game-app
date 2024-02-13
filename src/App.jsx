@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Grid from './components/cards'
 import './App.css'
 
@@ -7,8 +7,12 @@ function App() {
 
   const [highScore, setHighScore] = useState(0);
 
-  function updateCounter() {
+  const [cards, setCards] = useState([]);
 
+  const [playedCards, setPlayedCards] = useState([]);
+
+  function updateCounter() {
+    setCounter(counter+1)
   }
 
   function updateHighScore() {
@@ -17,6 +21,51 @@ function App() {
     }
   }
 
+  function shuffleCards() {
+      for (let i = cards.length-1; i>0; i--) {
+          const j = Math.floor(Math.random() * (i+1));
+              const temp = cards[i]
+              cards[i] = cards[j]
+              cards[j] = temp;
+      }
+      setCards([...cards])
+  }
+
+  function playCard(event) {
+      let card = cards.filter((card) => card.id==event.target.id)
+      console.log(card)
+      if (playedCards.includes(card[0])) {
+        updateHighScore();
+        setCounter(0);
+        setPlayedCards([])
+        alert('Try again!')
+      } else {
+        setPlayedCards(oldPlayedCards => [...oldPlayedCards, card[0]])
+        shuffleCards();
+        updateCounter();
+        if(counter > 10) {
+          alert('You Win!')
+          updateHighScore();
+          setCounter(0);
+        }
+      }
+
+  }
+
+  useEffect(() => {
+      fetch("http://thronesapi.com/api/v2/Characters", {
+              mode: 'cors'
+              }
+          )
+      .then((res) => {
+          return res.json();
+      })
+      .then(data => {
+      const cards = data.slice(0,12)
+      setCards(cards);
+  })
+  }, [])
+
   return (
     <>
       <div className="header">
@@ -24,7 +73,7 @@ function App() {
         <p>Score: {counter}</p>
         <p>High Score: {highScore}</p>
       </div>
-      <Grid counter={counter} updateCounter={updateCounter} highScore={highScore} updateHighScore={updateHighScore} />
+      <Grid counter={counter} updateCounter={updateCounter} highScore={highScore} updateHighScore={updateHighScore} cards={cards} playCard={playCard} />
     </>
   )
 }

@@ -3,6 +3,11 @@
   src: url('./assets/fonts/Game-of-Thrones.ttf');
 }
 
+@font-face {
+  font-family: 'junaretta';
+  src: url('./assets/fonts/JunarettaMartalle-eZrmx.otf');
+}
+
 body {
   background-color: rgb(252, 254, 240);
 }
@@ -20,6 +25,11 @@ h1 {
   color: rgb(185, 84, 12);
 }
 
+h2 {
+  margin: 5px;
+  font-size: xx-large;
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -32,6 +42,7 @@ li {
 .card-grid {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 .card-img {
@@ -47,8 +58,8 @@ img {
 
 }
 
-.card {
-
+.card > * {
+  pointer-events: none;
 }
 
 @keyframes logo-spin {
@@ -67,7 +78,15 @@ img {
 }
 
 .card {
-  padding: 2em;
+  padding: 1em;
+  background-color: rgb(255, 243, 188);
+  border-radius: 10px;
+  box-shadow: 4px 4px rgb(218, 171, 138);
+  font-family: 'junaretta'
+}
+
+.card:hover {
+  cursor: pointer;
 }
 
 .read-the-docs {
