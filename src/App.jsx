@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Grid from './components/cards'
+import Popup from 'reactjs-popup'
 import './App.css'
+
 
 function App() {
   const [counter, setCounter] = useState(0)
@@ -10,6 +12,8 @@ function App() {
   const [cards, setCards] = useState([]);
 
   const [playedCards, setPlayedCards] = useState([]);
+
+  const [popupMessage, setPopupMessage] = useState(['Try Again'])
 
   function updateCounter() {
     setCounter(counter+1)
@@ -38,19 +42,26 @@ function App() {
         updateHighScore();
         setCounter(0);
         setPlayedCards([])
-        alert('Try again!')
+        triggerPopup(true);
       } else {
         setPlayedCards(oldPlayedCards => [...oldPlayedCards, card[0]])
         shuffleCards();
         updateCounter();
         if(counter > 10) {
-          alert('You Win!')
+          setPopupMessage('You win!!')
+          triggerPopup(true);
           updateHighScore();
           setCounter(0);
         }
       }
 
   }
+
+  function triggerPopup(activate) {
+    const popUp = document.getElementById('pop-up');
+    activate ? popUp.style.display = 'block' : popUp.style.display = 'none';
+  }
+
 
   useEffect(() => {
       fetch("https://thronesapi.com/api/v2/Characters", {
@@ -76,8 +87,16 @@ function App() {
         </div>
         
         <h1>Game of Memory</h1>
-        <p>Score: {counter}</p>
-        <p>High Score: {highScore}</p>
+        <h3>Click through each character without repeating...</h3>
+        <div className="scores">
+          <h4>Score: {counter}</h4>
+          <h4>High Score: {highScore}</h4>
+        </div>
+
+      </div>
+      <div id='pop-up' className='pop-up' style={{display:'none'}}>
+        <h3>{popupMessage}</h3>
+        <button onClick={() => triggerPopup(false)} >Ok</button>
       </div>
       <Grid counter={counter} updateCounter={updateCounter} highScore={highScore} updateHighScore={updateHighScore} cards={cards} playCard={playCard} />
     </>

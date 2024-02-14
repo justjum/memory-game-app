@@ -20,6 +20,10 @@ body {
   background-color: RGB(255, 241, 144)
 }
 
+.header {
+  position: relative;
+}
+
 h1 {
   font-family: 'game-of-thrones';
   color: rgb(185, 84, 12);
@@ -83,28 +87,20 @@ img {
   animation: rotation 1s linear infinite;
   }
 
-  @keyframes rotation {
-  0% {
-      transform: rotate(0deg);
-  }
-  100% {
-      transform: rotate(360deg);
-  }
-  } 
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.scores {
+  position: absolute;
+  top: 5%;
+  right: 10%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.pop-up {
+  position: absolute;
+  background-color: rgb(252, 254, 240);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  border-radius: 10px;
 }
 
 .card {
