@@ -53,11 +53,12 @@ function App() {
   }
 
   useEffect(() => {
-      fetch("http://thronesapi.com/api/v2/Characters", {
+      fetch("https://thronesapi.com/api/v2/Characters", {
               mode: 'cors'
               }
           )
       .then((res) => {
+          document.querySelector(".loader-div").style.display = "none"
           return res.json();
       })
       .then(data => {
@@ -69,6 +70,11 @@ function App() {
   return (
     <>
       <div className="header">
+        <div id="loader-div" className='loader-div'>
+          <span className="loader" ></span>
+          <h3>Please wait...</h3>
+        </div>
+        
         <h1>Game of Memory</h1>
         <p>Score: {counter}</p>
         <p>High Score: {highScore}</p>
