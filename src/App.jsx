@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Grid from './components/cards'
-import Popup from 'reactjs-popup'
+import Popup from './components/popup'
+import Greyout from './components/greyout'
 import './App.css'
 
 
@@ -13,7 +14,13 @@ function App() {
 
   const [playedCards, setPlayedCards] = useState([]);
 
+  const [popupShow, setPopupShow] = useState(false);
+
   const [popupMessage, setPopupMessage] = useState(['Try Again'])
+
+  function popupSwitch() {
+    setPopupShow(!popupShow)
+  }
 
   function updateCounter() {
     setCounter(counter+1)
@@ -39,29 +46,23 @@ function App() {
       let card = cards.filter((card) => card.id==event.target.id)
       console.log(card)
       if (playedCards.includes(card[0])) {
+        popupSwitch();
         updateHighScore();
         setCounter(0);
         setPlayedCards([])
-        triggerPopup(true);
       } else {
         setPlayedCards(oldPlayedCards => [...oldPlayedCards, card[0]])
         shuffleCards();
         updateCounter();
         if(counter > 10) {
           setPopupMessage('You win!!')
-          triggerPopup(true);
-          updateHighScore();
+          popupSwitch();
+          updateHighScore(12);
           setCounter(0);
         }
       }
 
   }
-
-  function triggerPopup(activate) {
-    const popUp = document.getElementById('pop-up');
-    activate ? popUp.style.display = 'block' : popUp.style.display = 'none';
-  }
-
 
   useEffect(() => {
       fetch("https://thronesapi.com/api/v2/Characters", {
@@ -80,6 +81,7 @@ function App() {
 
   return (
     <>
+      <Greyout popupShow={popupShow}/>
       <div className="header">
         <div id="loader-div" className='loader-div'>
           <span className="loader" ></span>
@@ -94,10 +96,7 @@ function App() {
         </div>
 
       </div>
-      <div id='pop-up' className='pop-up' style={{display:'none'}}>
-        <h3>{popupMessage}</h3>
-        <button onClick={() => triggerPopup(false)} >Ok</button>
-      </div>
+      <Popup popupMessage={popupMessage} popupShow={popupShow} popupSwitch={popupSwitch}/>
       <Grid counter={counter} updateCounter={updateCounter} highScore={highScore} updateHighScore={updateHighScore} cards={cards} playCard={playCard} />
     </>
   )
